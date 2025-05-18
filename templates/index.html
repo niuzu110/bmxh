@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>笔墨星河v0.1</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Consider adding a CSS framework like Bootstrap or Tailwind later for faster styling -->
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>笔墨星河v0.1</h1>
+            <div class="controls">
+                <label for="model-select">选择模型:</label>
+                <select id="model-select" name="model">
+                    <option value="">-- 正在加载模型... --</option>
+                </select>
+                <span class="ollama-info">Ollama地址: <code id="ollama-address">http://localhost:11454</code></span>
+                <span id="status-indicator" class="status">初始化中...</span>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <aside class="sidebar">
+                <section class="sidebar-section">
+                    <h2><i class="fas fa-book icon-book"></i> 小说作品</h2>
+                    <ul id="novel-list">
+                        <li>正在加载小说列表...</li>
+                    </ul>
+                    <button id="new-novel-btn" class="btn btn-primary"><i class="fas fa-plus"></i> 创建新小说</button>
+                </section>
+
+                <section class="sidebar-section">
+                    <h2><i class="fas fa-toolbox icon-tools"></i> 工具箱</h2>
+                    <ul>
+                        <li><button class="tool-btn" data-tool="title"><i class="fas fa-heading icon-title"></i> 书名生成器</button></li>
+                        <li><button class="tool-btn" data-tool="outline"><i class="fas fa-list-ul icon-outline"></i> 大纲生成器</button></li>
+                        <li><button class="tool-btn" data-tool="detailed-outline"><i class="fas fa-tasks icon-detailed-outline"></i> 细纲生成器</button></li>
+                        <!-- Add more tools later -->
+                    </ul>
+                </section>
+
+                 <section class="sidebar-section advanced-tools">
+                     <h2><i class="fas fa-wrench icon-advanced"></i> 高级功能</h2>
+                     <ul>
+                     </ul>
+                 </section>
+
+            </aside>
+
+            <section class="content-area">
+                <!-- Welcome Screen (Visible initially) -->
+                <div id="welcome-screen" class="view">
+                    <h2>欢迎使用笔墨星河！</h2>
+                    <p>请从左侧选择一部小说继续写作，或创建一部新小说。</p>
+                    <p>您也可以使用工具箱中的工具。</p>
+                    <p>请确保您的Ollama服务正在运行于 <code id="ollama-address-welcome">http://localhost:11454</code>。</p>
+                     <!-- Model loading errors might appear here -->
+                </div>
+
+                <!-- Novel Writing Area (Hidden initially) -->
+                <div id="writing-area" class="view hidden">
+                    <div class="writing-title-bar">
+                        <h2 id="writing-novel-title">小说标题</h2>
+                        <span id="word-count-display" class="word-count">字数: 0</span>
+                    </div>
+                    <div class="writing-toolbar">
+                        <button id="undo-btn" title="撤销 (未实现)"><i class="fas fa-undo icon-undo"></i> 撤销</button>
+                        <button id="copy-btn" title="复制选中 (未实现)"><i class="fas fa-copy icon-copy"></i> 复制</button>
+                        <button id="view-mode-btn" title="查看模式 (未实现)"><i class="fas fa-eye icon-view"></i> 查看</button>
+                        <button id="replace-btn" title="替换选中 (未实现)"><i class="fas fa-random icon-replace"></i> 替换</button>
+                        <button id="format-btn" title="智能排版 (未实现)"><i class="fas fa-align-left icon-format"></i> 智能排版</button>
+                        <button id="save-novel-btn" title="保存小说"><i class="fas fa-save icon-save"></i> 保存</button>
+                        <!-- Export Buttons -->
+                        <button id="export-txt-btn" title="导出为 TXT"><i class="fas fa-file-alt"></i> TXT</button>
+                        <button id="export-json-btn" title="导出为 JSON"><i class="fas fa-file-code"></i> JSON</button>
+                        <button id="export-docx-btn" title="导出为 DOCX"><i class="fas fa-file-word"></i> DOCX</button>
+                        <!-- End Export Buttons -->
+                    </div>
+                    <!-- Metadata Inputs -->
+                    <div class="metadata-inputs">
+                        <div class="metadata-group">
+                            <label for="characters-input"><i class="fas fa-users"></i> 角色设定:</label>
+                            <textarea id="characters-input" rows="3" placeholder="输入主要角色及其设定..."></textarea>
+                        </div>
+                        <div class="metadata-group">
+                            <label for="knowledge-input"><i class="fas fa-brain"></i> 关联知识:</label>
+                            <textarea id="knowledge-input" rows="3" placeholder="输入相关的背景知识、世界观设定或参考资料..."></textarea>
+                        </div>
+                        <div class="metadata-group">
+                            <label for="prompt-library-input"><i class="fas fa-lightbulb"></i> 提示词库:</label>
+                            <textarea id="prompt-library-input" rows="3" placeholder="存储常用的提示词或指令..."></textarea>
+                        </div>
+                    </div>
+                    <!-- End Metadata Inputs -->
+                    <textarea id="novel-content" placeholder="开始你的小说创作..."></textarea>
+                    <div class="generation-controls">
+                        <textarea id="prompt-input" rows="3" placeholder="在此输入您的写作提示（例如：'描述角色进入酒馆'，'续写当前故事'）"></textarea>
+                        <div class="generation-buttons">
+                             <button id="generate-btn" class="btn btn-action"><i class="fas fa-magic"></i> 生成文本</button>
+                             <button id="continue-btn" class="btn btn-secondary"><i class="fas fa-pen-fancy"></i> 继续写作</button>
+                        </div>
+                    </div>
+                    <div id="generated-output" class="output-area hidden">
+                        <h3>生成内容:</h3>
+                        <pre><code id="output-text"></code></pre>
+                         <div class="output-actions">
+                             <button id="accept-output-btn" title="采纳内容 (未实现)"><i class="fas fa-check icon-accept"></i> 采纳</button>
+                             <button id="retry-output-btn" title="重新生成 (未实现)"><i class="fas fa-redo icon-retry"></i> 重试</button>
+                         </div>
+                    </div>
+                </div>
+
+                 <!-- Toolbox Area (Hidden initially) -->
+                 <div id="toolbox-area" class="view hidden">
+                    <h2 id="toolbox-title">工具箱</h2>
+                    <div class="toolbox-controls">
+                        <textarea id="toolbox-prompt" rows="5" placeholder="输入内容或关键词..."></textarea>
+                        <button id="toolbox-generate-btn" class="btn btn-action" data-tool-type=""><i class="fas fa-cogs"></i> 生成</button>
+                    </div>
+                    <div id="toolbox-output" class="output-area hidden">
+                        <h3>工具输出:</h3>
+                        <pre><code id="toolbox-output-text"></code></pre>
+                        <div class="output-actions">
+                             <button id="copy-toolbox-output-btn" title="复制输出 (未实现)"><i class="fas fa-copy icon-copy"></i> 复制输出</button>
+                         </div>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html> 
