@@ -1,0 +1,607 @@
+/* Basic Reset & Defaults */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f4f7fc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Main Application Container */
+.app-container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 100%;
+    max-width: 1400px;
+    height: 90vh; /* Make it take most of the viewport height */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.app-header {
+    background-color: #4a5568; /* Darker header */
+    color: #ffffff;
+    padding: 15px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.app-header h1 {
+    font-size: 1.5em;
+    font-weight: 600;
+}
+
+.app-header .controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.app-header label {
+    font-weight: 500;
+}
+
+.app-header select {
+    padding: 8px 12px;
+    border: 1px solid #cbd5e0;
+    border-radius: 5px;
+    background-color: #ffffff;
+    font-size: 0.9em;
+    min-width: 150px;
+}
+
+.app-header .ollama-info code {
+    background-color: #2d3748;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+.app-header .status {
+    font-style: italic;
+    font-size: 0.9em;
+    color: #a0aec0; /* Lighter status text */
+}
+
+/* Main Content Layout (Sidebar + Content Area) */
+.main-content {
+    display: flex;
+    flex-grow: 1;
+    overflow: hidden; /* Prevent content overflow */
+}
+
+/* Sidebar */
+.sidebar {
+    width: 280px;
+    background-color: #edf2f7; /* Light gray background */
+    border-right: 1px solid #e2e8f0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    overflow-y: auto; /* Allow scrolling if content overflows */
+}
+
+.sidebar-section h2 {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #4a5568;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #cbd5e0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+/* Novel List Specific Styles */
+#novel-list li {
+    padding: 10px 15px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    font-size: 0.95em;
+}
+
+#novel-list li:hover {
+    background-color: #e2e8f0;
+}
+
+#novel-list li.active {
+    background-color: #4299e1; /* Blue for active */
+    color: #ffffff;
+    font-weight: 500;
+    border-color: #2b6cb0;
+}
+
+/* Toolbox List Specific Styles */
+.sidebar-section ul li button.tool-btn {
+    background: none;
+    border: none;
+    color: #4a5568;
+    text-align: left;
+    padding: 8px 0;
+    width: 100%;
+    cursor: pointer;
+    font-size: 0.95em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s ease;
+}
+
+.sidebar-section ul li button.tool-btn:hover {
+    color: #2b6cb0;
+}
+
+/* Buttons */
+.btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: 500;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background-color: #48bb78; /* Green */
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #38a169;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary {
+    background-color: #667eea; /* Indigo */
+    color: white;
+}
+.btn-secondary:hover {
+    background-color: #5a67d8;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-action {
+    background-color: #4299e1; /* Blue */
+    color: white;
+}
+
+.btn-action:hover {
+     background-color: #3182ce;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Center the create novel button */
+#new-novel-btn {
+    width: 100%;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+/* Content Area */
+.content-area {
+    flex-grow: 1;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* Allow scrolling within the content area */
+}
+
+.view {
+    width: 100%;
+    height: 100%; /* Allow views to fill the content area */
+    display: flex;
+    flex-direction: column;
+}
+
+.view.hidden {
+    display: none;
+}
+
+/* Welcome Screen */
+#welcome-screen {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #718096;
+}
+
+#welcome-screen h2 {
+    color: #2d3748;
+    margin-bottom: 15px;
+}
+
+#welcome-screen code {
+     background-color: #edf2f7;
+     padding: 2px 5px;
+     border-radius: 4px;
+     font-family: monospace;
+}
+
+/* Writing Area */
+#writing-area {
+    gap: 15px; /* Spacing between elements */
+}
+
+/* New: Style for title bar */
+.writing-title-bar {
+    display: flex;
+    justify-content: space-between; /* Align title left, count right */
+    align-items: baseline; /* Align based on text baseline */
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+#writing-area h2 {
+    font-size: 1.3em;
+    color: #2d3748;
+    border-bottom: none; /* Remove bottom border from h2 */
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+/* New: Style for word count */
+.word-count {
+    font-size: 0.9em;
+    color: #718096; /* Grayish color */
+    font-weight: 500;
+}
+
+.writing-toolbar {
+    background-color: #edf2f7;
+    padding: 8px 15px;
+    border-radius: 5px;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap; /* Allow toolbar buttons to wrap */
+}
+
+.writing-toolbar button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    color: #4a5568;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.2s ease;
+}
+
+.writing-toolbar button:hover {
+    color: #2b6cb0;
+}
+
+/* Metadata Inputs Styling */
+.metadata-inputs {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px; /* Space before main content */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+.metadata-group {
+    flex: 1; /* Try to distribute space equally */
+    min-width: 250px; /* Minimum width before wrapping */
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.metadata-group label {
+    font-weight: 500;
+    font-size: 0.9em;
+    color: #4a5568;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.metadata-group textarea {
+    height: 80px; /* Fixed height for metadata textareas */
+    resize: vertical; /* Only allow vertical resize */
+    font-size: 0.9em;
+    padding: 8px 10px;
+}
+/* End Metadata Inputs Styling */
+
+/* Text Areas */
+textarea {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #cbd5e0;
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 1em;
+    line-height: 1.5;
+    resize: vertical; /* Allow vertical resizing */
+}
+
+#novel-content {
+    flex-grow: 1; /* Take available vertical space */
+    min-height: 300px; /* Ensure a minimum height */
+}
+
+/* Generation Controls */
+.generation-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.generation-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+/* Output Area (Shared by Writing and Toolbox) */
+.output-area {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #edf2f7;
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+}
+
+.output-area h3 {
+    font-size: 1em;
+    font-weight: 600;
+    color: #4a5568;
+    margin-bottom: 10px;
+}
+
+.output-area pre {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #cbd5e0;
+    max-height: 200px; /* Limit height */
+    overflow-y: auto;
+    white-space: pre-wrap; /* Wrap long lines */
+    word-wrap: break-word;
+}
+
+.output-area code {
+    font-family: monospace;
+    font-size: 0.95em;
+    color: #2d3748;
+}
+
+.output-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.output-actions button {
+    background: none;
+    border: 1px solid #a0aec0;
+    color: #4a5568;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.output-actions button:hover {
+     background-color: #e2e8f0;
+     color: #2b6cb0;
+}
+
+/* Toolbox Area Specifics */
+#toolbox-area {
+    gap: 15px;
+}
+
+#toolbox-area h2 {
+    font-size: 1.3em;
+    color: #2d3748;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.toolbox-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Icons (Placeholder - Add actual icons later e.g., using Font Awesome) */
+[class^="icon-"]::before {
+    content: "\f007"; /* Example placeholder icon */
+    font-family: "Font Awesome 5 Free"; /* Assuming Font Awesome */
+    font-weight: 900;
+    margin-right: 5px;
+    display: inline-block;
+}
+
+/* Specific icon placeholders (replace content codes) */
+.icon-book::before { content: "\f02d"; } /* fa-book */
+.icon-tools::before { content: "\f7d9"; } /* fa-toolbox */
+.icon-title::before { content: "\f574"; } /* fa-heading */
+.icon-outline::before { content: "\f03a"; } /* fa-list-ul */
+.icon-detailed-outline::before { content: "\f03c"; } /* fa-tasks */
+.icon-advanced::before { content: "\f0ad"; } /* fa-wrench */
+.icon-users::before { content: "\f0c0"; } /* fa-users */
+.icon-glossary::before { content: "\f02e"; } /* fa-bookmark */
+.icon-undo::before { content: "\f0e2"; } /* fa-undo */
+.icon-copy::before { content: "\f0c5"; } /* fa-copy */
+.icon-view::before { content: "\f06e"; } /* fa-eye */
+.icon-replace::before { content: "\f363"; } /* fa-random */
+.icon-format::before { content: "\f035"; } /* fa-align-left */
+.icon-save::before { content: "\f0c7"; } /* fa-save */
+.icon-accept::before { content: "\f00c"; } /* fa-check */
+.icon-retry::before { content: "\f01e"; } /* fa-redo */
+
+
+/* Utility */
+.hidden {
+    display: none !important;
+}
+
+/* Character Library Styles */
+#character-library-area {
+    gap: 15px;
+}
+
+#character-library-area h2 {
+    font-size: 1.3em;
+    color: #2d3748;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.character-library-content {
+    display: flex;
+    gap: 20px;
+    flex-grow: 1;
+    overflow: hidden; /* Prevent inner scrollbars if possible */
+}
+
+.character-list-panel {
+    width: 300px; /* Fixed width for list */
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #e2e8f0;
+    padding-right: 20px;
+}
+
+.character-list-panel h3 {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    color: #4a5568;
+}
+
+#character-list {
+    list-style: none;
+    flex-grow: 1;
+    overflow-y: auto; /* Allow scrolling for long lists */
+    margin-bottom: 15px;
+    padding-right: 5px; /* Space for scrollbar */
+}
+
+#character-list li {
+    padding: 8px 12px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    font-size: 0.95em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#character-list li:hover {
+    background-color: #e2e8f0;
+}
+
+#character-list li.active {
+    background-color: #4299e1;
+    color: #ffffff;
+    font-weight: 500;
+    border-color: #2b6cb0;
+}
+
+.char-delete-btn {
+     background: none;
+     border: none;
+     color: #e53e3e;
+     cursor: pointer;
+     font-size: 0.9em;
+     padding: 0 3px;
+     opacity: 0.7;
+     transition: opacity 0.2s ease;
+}
+
+.char-delete-btn:hover {
+    opacity: 1;
+}
+
+.character-detail-panel {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* Allow scrolling if form is long */
+}
+
+.character-detail-panel h3 {
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    color: #4a5568;
+}
+
+#character-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    font-weight: 500;
+    font-size: 0.9em;
+    color: #4a5568;
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cbd5e0;
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 1em;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+} 
